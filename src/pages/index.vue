@@ -2,7 +2,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue';
+import { onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStorage } from '@vueuse/core'
 import { TokenApi } from 'spacegt';
@@ -11,7 +11,7 @@ const route = useRoute()
 
 const token = useStorage<any>('token', undefined)
 
-onMounted(async () => {
+onBeforeMount(async () => {
   if (route.query.token) {
     if (route.query.token == 'remove') {
       token.value = undefined
