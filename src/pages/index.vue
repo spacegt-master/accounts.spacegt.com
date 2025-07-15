@@ -13,7 +13,10 @@ const token = useStorage<any>('token', undefined)
 
 onMounted(async () => {
   if (route.query.token) {
-    token.value = route.query.token
+    if (route.query.token == 'remove') {
+      token.value = undefined
+    } else
+      token.value = route.query.token
     return;
   }
 
@@ -31,6 +34,5 @@ onMounted(async () => {
     };
     window.parent.postMessage(messageData, '*');
   }
-
 })
 </script>
