@@ -1,0 +1,36 @@
+<template>
+</template>
+
+<script lang="ts" setup>
+import { onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useStorage } from '@vueuse/core'
+import { TokenApi } from 'spacegt';
+
+const route = useRoute()
+
+const token = useStorage<any>('token', undefined)
+
+onMounted(async () => {
+  if (route.query.token) {
+    token.value = route.query.token
+    return;
+  }
+
+  if (token.value) {
+    const res = await TokenApi.validate(token.value)
+
+    if (!res) {
+      token.value = undefined
+      return;
+    };
+
+    const messageData = {
+      type: 'token',
+      payload: token.value
+    };
+    window.parent.postMessage(messageData, '*');
+  }
+
+})
+</script>
