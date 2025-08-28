@@ -23,16 +23,12 @@ onBeforeMount(async () => {
   if (token.value) {
     const res = await TokenApi.validate(token.value)
 
-    if (!res) {
+    if (res) {
+      window.parent.postMessage({ type: 'token', payload: token.value }, '*');
+    } else {
       token.value = undefined
-      return;
-    };
-
-    const messageData = {
-      type: 'token',
-      payload: token.value
-    };
-    window.parent.postMessage(messageData, '*');
+      window.parent.postMessage({ type: 'token_expired' }, '*');
+    }
   }
 })
 </script>
